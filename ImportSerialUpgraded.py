@@ -1,8 +1,9 @@
 import serial
 import time
-import face_recognition
 import cv2
-import numpy
+from tensorflow.keras.models import load_model
+import numpy as np
+import face_cascade
 import os
 
 ser = serial.Serial('COM3',9800,timeout=1)
@@ -44,42 +45,49 @@ while True:
 
             elif (line[0]) == 'C':
 
-                video = cv2.VideoCapture(0)
+                video = cv2.VideoCapture(0) 
+                
+    # Load the pre-trained face detection model
+    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
-                face = face_recognition.load_image_file("1.jpg")
-                faceencoding = face_recognition.face_encodings(face)[0]
+    # Load the Keras face recognition model
+    model = load_model('keras_model.h5')
 
-                face_encodings_list = [
-                    faceencoding]
+    # Load the image
+    img = cv2.imread('One.jpg')
 
-                face_encodings = []
-                s = True
-                face_coordinates=[]
+    # Convert the image to grayscale
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
+    # Detect faces in the image
+    faces = face_cascade.detectMultiScale(gray, 1.1, 4)
 
-                while True:
-                    _,frame = video.read()
+    # Iterate over the detected faces
+    for (x, y, w, h) in faces:
+    # Extract the face ROI (Region of Interest)
+        face_roi = gray[y:y+h, x:x+w]
 
-                    resized_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
+    # Resize the face ROI to the input size of the model
+    resized_face = cv2.resize(face_roi, (model.input_shape[1], model.input_shape[2]))
 
-                    resized_frame_rgb = frame[:, :, ::-1]
+    # Normalize the pixel values
+    normalized_face = resized_face / 255.0
 
+    # Expand the dimensions of the image to match the model's input shape
+    reshaped_face = np.expand_dims(normalized_face, axis=0)
+    reshaped_face = np.expand_dims(reshaped_face, axis=-1)
 
-                    if s:
-                        face_coordinates = face_recognition.face_locations(resized_frame_rgb)
-                        face_encodings = face_recognition.face_encodings(resized_frame_rgb, face_coordinates)
+    # Make a prediction using the Keras model
+    prediction = model.predict(reshaped_face)
 
-                        for faces in face_encodings:
-                            matches = face_recognition.compare_faces(face_encodings_list, faces)
-                            if matches[0] == True:
-                                video.release()
-                                cv2.destroyAllWindows()
-                                main_function()
+    # Get the predicted class
+    predicted_class = np.argmax(prediction)
 
-                    cv2.imshow('Face Scan', frame)
+    # Draw a rectangle around the face and display the predicted class
+    cv2.rectangle(img, (x, y), (x+w, y+h), (0, 255, 0), 2)
+    cv2.putText(img, str(predicted_class), (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
 
-                    if cv2.waitKey(1) & 0xFF == ord('q'):
-                        break
-
-                video.release()
-                cv2.destroyAllWindows()
+    # Display the output image
+    cv2.imshow('Face Recognition', img)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
