@@ -4,7 +4,7 @@ References:
 
 2. PySerial Documentation (https://pyserial.readthedocs.io/en/latest/)
 
-3, TensorFlow Documentation (https://www.tensorflow.org/)
+3. TensorFlow Documentation (https://www.tensorflow.org/)
 
 4. Arduino Documentation (https://docs.arduino.cc/)
 
@@ -23,10 +23,10 @@ Apps:
 Supports and Imports from PIPy:
 
 1. OpenCV/Keras
-2. TensorFlow
-3. NumPy
+2. TensorFlow (as tensorflow.keras.models import load_model_
+3. NumPy (as np)
 4. OS
-5. Face Recognition (all latest as of time of posting)
+5. face_cascade
 
 Hardware: 
 
@@ -62,23 +62,26 @@ Step 3 Setting up Arduino IDE and entering code
 
 Step 4 Entering and modifying Python Serial coding, and then setting up Tensorflow.
 
-1. Enter "serial", "time", "face_recognition", "cv2", "numpy", and "os" as imports
-2. Using class and/or researched source code as needed, enter the python code into the Visual Studio compiler. I saved mine as ImportSerial.py.
+1. Enter "serial", "time", "cv2", "numpy as np", "tensorflow.keras.models import load_model", "face cascade" and "os" as imports
+2. Using class and/or researched source code as needed, enter the python code into the Visual Studio compiler. I saved mine as ImportSerialUpgraded.py.
 3. Modify the code in line 8 to reflect the correct port name and baud rate. In this case, it should be "COM3" and "9600"
 4. Define the main function in lines 13 and 14 to reflect entering the correct password. print("correct password")
 5. Modify line 40 to reflect custom, 3-digit passcode.
-6. Snap a photograph with your webcam. Save it as "One.jpg". Enter it into line 50 where it says "load image file".
-7. Earlier, a model was created on Teachable Machine named "keras_model.h5". Keras compatible code, saved as TensorFlow.py, should have been generated and saved by Teachable Machine. Open "keras_model.h5", "TensorFlow.py". and "labels.txt" in Visual Studio Code.
+6. At Line 50 replace coding used in Basic Prime 2-Step Security System on Gate61546 GitHub, with coding from "Upgraded Prime" GitHub Repository in file named ImportSerialUpgraded.py. This coding is designed and written to use OpenCv and PyPi imports in a consolidated and simplified way, while using both an uploaded JPEG file and hre described "Keras_model.h5". Face_Recognition import, as was the case in "Basic Prime 2-Step", is redundant and unnessary
+7. Snap a photograph with your webcam. Save it as "One.jpg". Enter it into line 57 where it says "cv.imread('')".
+8. Earlier, a model was created on Teachable Machine named "keras_model.h5". Keras compatible code, saved as TensorFlow.py, should have been generated and saved by Teachable Machine. Open "keras_model.h5", "TensorFlow.py". and "labels.txt" in Visual Studio Code.
+9. Make sure "keras_model.h5" is written into line 54 where it says "load_model('')".
 
 Step 5 Test the System
 
-1. Verify your sketch on Arduino, and upload it.
-2. Run the ImportSerial.py program with webcam running.
-3. Check for bugs, error, and Python-Arduino connection issues.
-4. It if runs, without issue, follow the instructions and enter necessary input.
+1. Go through list of PyPi import files on computer, and open them.
+2. Verify your sketch on Arduino, and upload it.
+3. Run the ImportSerial.py program with webcam running.
+4. Check for bugs, error, and Python-Arduino connection issues.
+5. If it runs, without issue, follow the instructions and enter necessary input.
 
 Step 6 Trouble Shooting
 
-1. When I run my application, the Arduino sketch uploads and runs.
-2. When I run the ImportSerial.py program, it shows some issues. 1) Import face_recogniton is sometimes recognized and resolved to a variable, and sometimes it cuts out. 2) Keras.models import from TensorFlow.py program is not resolved.
-3. I was and am under the impression that the .jpg file was supposed to work in conjunction with the keras.models. Some modification to Face_Recognition starting at line 50 will need to be made.
+1. When I run my application, the Arduino sketch uploads and runs. On
+2. When I run the ImportSerialUpgraded.py program, it can show some issues. On a number of occasions, as with the previous basic program, the keypad worked or accepted imput in recursive pyramid. Look for bugs, syntax, error codes, or issues with the compiler being used if problems are encountered.
+3. If problems occur with face verfication AI 1) Keras.models import from TensorFlow.py program may not be resolved. If this happens, it could be the result of the compiler that you are using. Or, it could be an issue with the environment. There may be mismatches and incompatbility in various imports, or some versions may be outdated. Also, the import statement may have been incorrectly entered. Finally, check the Python IDE-Environment Configuation.
