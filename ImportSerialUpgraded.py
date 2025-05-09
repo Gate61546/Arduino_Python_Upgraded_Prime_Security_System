@@ -1,8 +1,8 @@
 import serial
 import time
 import cv2
-from tensorflow.keras.models import load_model
 import numpy as np
+from tensorflow.keras.models import load_model
 import face_cascade
 import os
 
